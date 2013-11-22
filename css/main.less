@@ -1,0 +1,1273 @@
+/*
+# 変数定義
+
+## カラーパレット
+*/
+@white: rgb(255,255,255);
+@black: rgb(0,0,0);
+@blue: rgb(0,67,134);
+@yellow: rgb(253,208,0);
+@gray: rgb(112,127,134);
+@red: rgb(199,22,30);
+@orange: rgb(239,130,0);
+@green: rgb(24,147,59);
+@mediumpurple: rgb(141,138,181);
+@purple: rgb(128,27,117);
+@silver: rgb(213,216,217);
+@transparent-white: rgba(255,255,255,0.9);
+@transparent-black: rgba(0,0,0,0.2);
+@transparent-mediumpurple: rgb(198,196,218);
+@transparent-silver: rgb(234,235,236,0.5);
+
+/*
+# タッチデバイス向けの指定
+*/
+* {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+}
+input, .message {
+  -webkit-user-select: auto;
+}
+body {
+  -webkit-text-size-adjust: 100%;
+}
+/*
+** Chrome for Android で、ボタンにオレンジの枠線が表示されないようにするため、
+outline: none を指定した。しかし、ヘッダとフッタが、フレンドリストやチャットの背後に
+表示される不具合が発生したので、コメントアウトした。 **
+*/
+/*
+button:focus {
+  outline: none;
+}
+*/
+
+/*
+# デフォルトスタイルの上書き、ノーマライズ
+
+## レイアウト用
+*/
+* {
+  box-sizing: border-box;
+}
+html {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-family: 'Helvetica Neue', Helvetica, Arial, san-serif;
+}
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: @white;
+}
+/*
+## ボタンのデフォルトスタイルの上書き
+*/
+button {
+  -webkit-appearance: none;
+  background: none;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/*
+# ページを実現するための指定
+*/
+#pages {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-transition: -webkit-transform 0.2s ease-out 0s;
+}
+.showing-list-page #pages {
+  -webkit-transform: translateX(0%);
+}
+.showing-chat-page #pages {
+  -webkit-transform: translateX(-100%);
+}
+.page {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+}
+#listPage {
+  left: 0;
+  top: 0;
+}
+#chatPage {
+  left: 100%;
+  top: 0;
+}
+
+/*
+# ページ内部の指定
+
+## ヘッダ
+*/
+.page-title {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 50px;
+  background-color: @transparent-white;
+  border-bottom: 1px @silver solid;
+  z-index: 100;
+  h1 {
+    margin: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    font-size: 18px;
+    height: 49px;
+    line-height: 49px;
+    text-align: center;
+  }
+  button {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 14px;
+    line-height: 49px;
+    height: 49px;
+    z-index: 110;
+    padding-left: 10px;
+  }
+}
+
+/*
+## ボディ部
+*/
+.container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 0;
+  padding: 50px 0 0 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+/*
+## リストページ内部の指定
+*/
+#userList {
+  margin: 0;
+  padding: 0;
+  li {
+    display: block;
+    list-style-type: none;
+    padding: 15px;
+    min-height: 48px;
+    border-bottom: 1px @silver solid;
+  }
+}
+.username {
+  font-size: 18px;
+  height: 18px;
+  line-height: 18px;
+  margin: 0 0 8px 0;
+  float: left;
+  font-weight: bold;
+}
+.latest-date {
+  font-size: 14px;
+  color: @gray;
+  height: 18px;
+  line-height: 18px;
+  margin: 0 0 0 8px;
+  float: right;
+  font-weight: normal;
+}
+.latest-message {
+  clear: both;
+  font-size: 14px;
+  color: @gray;
+  width: 100%;
+  height: 15px;
+  line-height: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/*
+## チャットページ内部の指定
+*/
+#chatContainer {
+  padding-bottom: 50px;
+  hr {
+    margin-top: 25px;
+    margin-bottom: 15px;
+    border: 0;
+    width: 80%;
+    height: 1px;
+    background-image: -webkit-linear-gradient(left,
+      rgba(112,127,134,0), rgba(112,127,134,1) 40%, rgba(112,127,134,1) 60%, rgba(112,127,134,0));
+  }
+}
+#backButton{
+  color: @blue;
+}
+.connected #backButton {
+  display: none;  /* 通話中は非表示にする。*/
+}
+.datetime {
+  font-size: 12px;
+  text-align: center;
+  color: @gray;
+  margin: 20px 0 5px;
+  height: 14px;
+  line-height: 14px;
+}
+
+/*
+### 吹き出し
+*/
+.message-wrapper {
+  position: relative;
+}
+.message {
+  font-size: 14px;
+  padding: 5px 10px;
+  width: 240px;
+  border-radius: 20px;
+  line-height: 21px;
+  -webkit-transition: all 0.2s ease-out 0s;
+}
+.my.message {
+  margin: 5px 15px 15px auto;
+  color: @white;
+  background-color: @mediumpurple;
+  border-bottom-right-radius: 0;  /* 吹き出しの代わりに右下の角をとがらせる */
+}
+.your.message {
+  margin: 5px auto 15px 15px;
+  background-color: @silver;
+  border-bottom-left-radius: 0;   /* 吹き出しの代わりに左下の角をとがらせる */
+}
+.my.message.current {
+  color: @white;
+  background-color: @transparent-mediumpurple;
+}
+.your.message.current {
+  color: @gray;
+  background-color: @transparent-silver;
+}
+/*
+**Chrome for Mac/Android で吹き出しの残像が残る不具合と
+Chrome for Android でチャットのスクロールができなくなる不具合を回避するため
+:after と :before を使った吹き出しをやめた。**
+*/
+/*
+.message:after {
+  content: '';
+  position: absolute;
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  z-index: -1;
+  background-color: @white;
+  bottom: -12px;
+}
+.message:before {
+  content: '';
+  position: absolute;
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  z-index: -1;
+  bottom: -10px;
+}
+.my.message:after {
+  right: -3px;
+}
+.my.message:before {
+  background-color: @mediumpurple;
+  right: 10px;
+}
+.my.message.current:before {
+  background-color: @transparent-mediumpurple;
+  right: 10px;
+}
+.your.message:after {
+  left: -3px;
+}
+.your.message:before {
+  background-color: @silver;
+  left: 10px;
+}
+.your.message.current:before {
+  background-color: @transparent-silver;
+  left: 10px;
+}
+*/
+.edited {
+  font-style: italic;
+  text-decoration: underline;
+}
+
+/*
+### フッタのボタン
+*/
+.button-wrapper {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 7px;
+  height: 50px;
+  background-color: @transparent-white;
+  text-align: center;
+  border-top: 1px @silver solid;
+  z-index: 100;
+  button {
+    width: 160px;
+    height: 36px;
+    font-size: 18px;
+    line-height: 36px;
+    border-radius: 10px;
+  }
+}
+#connectButton {
+  color: @white;
+  background-color: @green;
+}
+.connected #connectButton {
+  display: none;
+}
+#disconnectButton {
+  color: @white;
+  background-color: @red;
+  display: none;
+}
+.connected #disconnectButton {
+  display: inline;
+}
+
+/*
+# モーダルダイアログを実現するための指定
+*/
+.modal {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: @transparent-black;
+  -webkit-transition: all 0.2s ease-out 0s;
+  -webkit-transform: perspective(1000px) translateZ(1001px);
+  /*
+  transform: translateZ() だけでモーダルを非表示にすると、<body> に overflow: hidden を
+  適用しているのにも関わらずスクロールできてしまうという、WebKitのバグが存在することがわかった。
+  バグに対処するため、モーダルが非表示のときは display: none を設定する。
+  */
+  display: none;
+  opacity: 0;
+  z-index: 200;
+}
+.showing-login-modal #loginModal, .showing-incoming-modal #incomingModal {
+  -webkit-transform: perspective(1000px) translateZ(0px);
+  opacity: 1;
+}
+.dialog-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+.dialog {
+  position: absolute;
+  left: -140px;
+  top: -105px;
+  background-color: @transparent-white;
+  width: 280px;
+  height: 187px;
+  border-radius: 10px;
+  h1 {
+    margin: 15px 0;
+    width: 100%;
+    font-size: 14px;
+    line-height: 21px;
+    text-align: center;
+  }
+  p {
+    margin: 15px 0;
+    font-size: 14px;
+    line-height: 21px;
+    text-align: center;
+  }
+  input[type=text] {
+    display: block;
+    font-size: 14px;
+    padding: 6px 12px;
+    margin: 15px;
+    width: 250px;
+    height: 34px;
+    line-height: 20px;
+    border: 1px solid @silver;
+    background-color: white;
+    border-radius: 4px;
+  }
+  button {
+    display: block;
+    width: 117px;
+    height: 36px;
+    font-size: 18px;
+    line-height: 36px;
+    border-radius: 10px;
+  }
+}
+#cancelButton {
+  float: left;
+  margin-left: 15px;
+  color: @blue;
+}
+#okButton {
+  float: right;
+  margin-right: 15px;
+  color: @blue;
+}
+#rejectButton {
+  float: left;
+  margin-left: 15px;
+  color: @white;
+  background-color: @red;
+}
+#acceptButton {
+  float: right;
+  margin-right: 15px;
+  color: @white;
+  background-color: @green;
+}
+
+/*
+# Glyphicons (絵文字フォント) 用
+*/
+
+@font-face {
+  font-family: 'Glyphicons Halflings';
+  src: url('../fonts/glyphicons-halflings-regular.woff') format('woff');
+}
+
+.glyphicon {
+  position: relative;
+  top: 1px;
+  display: inline-block;
+  font-family: 'Glyphicons Halflings';
+  -webkit-font-smoothing: antialiased;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+}
+
+.glyphicon-asterisk:before {
+  content: "\2a";
+}
+
+.glyphicon-plus:before {
+  content: "\2b";
+}
+
+.glyphicon-euro:before {
+  content: "\20ac";
+}
+
+.glyphicon-minus:before {
+  content: "\2212";
+}
+
+.glyphicon-cloud:before {
+  content: "\2601";
+}
+
+.glyphicon-envelope:before {
+  content: "\2709";
+}
+
+.glyphicon-pencil:before {
+  content: "\270f";
+}
+
+.glyphicon-glass:before {
+  content: "\e001";
+}
+
+.glyphicon-music:before {
+  content: "\e002";
+}
+
+.glyphicon-search:before {
+  content: "\e003";
+}
+
+.glyphicon-heart:before {
+  content: "\e005";
+}
+
+.glyphicon-star:before {
+  content: "\e006";
+}
+
+.glyphicon-star-empty:before {
+  content: "\e007";
+}
+
+.glyphicon-user:before {
+  content: "\e008";
+}
+
+.glyphicon-film:before {
+  content: "\e009";
+}
+
+.glyphicon-th-large:before {
+  content: "\e010";
+}
+
+.glyphicon-th:before {
+  content: "\e011";
+}
+
+.glyphicon-th-list:before {
+  content: "\e012";
+}
+
+.glyphicon-ok:before {
+  content: "\e013";
+}
+
+.glyphicon-remove:before {
+  content: "\e014";
+}
+
+.glyphicon-zoom-in:before {
+  content: "\e015";
+}
+
+.glyphicon-zoom-out:before {
+  content: "\e016";
+}
+
+.glyphicon-off:before {
+  content: "\e017";
+}
+
+.glyphicon-signal:before {
+  content: "\e018";
+}
+
+.glyphicon-cog:before {
+  content: "\e019";
+}
+
+.glyphicon-trash:before {
+  content: "\e020";
+}
+
+.glyphicon-home:before {
+  content: "\e021";
+}
+
+.glyphicon-file:before {
+  content: "\e022";
+}
+
+.glyphicon-time:before {
+  content: "\e023";
+}
+
+.glyphicon-road:before {
+  content: "\e024";
+}
+
+.glyphicon-download-alt:before {
+  content: "\e025";
+}
+
+.glyphicon-download:before {
+  content: "\e026";
+}
+
+.glyphicon-upload:before {
+  content: "\e027";
+}
+
+.glyphicon-inbox:before {
+  content: "\e028";
+}
+
+.glyphicon-play-circle:before {
+  content: "\e029";
+}
+
+.glyphicon-repeat:before {
+  content: "\e030";
+}
+
+.glyphicon-refresh:before {
+  content: "\e031";
+}
+
+.glyphicon-list-alt:before {
+  content: "\e032";
+}
+
+.glyphicon-flag:before {
+  content: "\e034";
+}
+
+.glyphicon-headphones:before {
+  content: "\e035";
+}
+
+.glyphicon-volume-off:before {
+  content: "\e036";
+}
+
+.glyphicon-volume-down:before {
+  content: "\e037";
+}
+
+.glyphicon-volume-up:before {
+  content: "\e038";
+}
+
+.glyphicon-qrcode:before {
+  content: "\e039";
+}
+
+.glyphicon-barcode:before {
+  content: "\e040";
+}
+
+.glyphicon-tag:before {
+  content: "\e041";
+}
+
+.glyphicon-tags:before {
+  content: "\e042";
+}
+
+.glyphicon-book:before {
+  content: "\e043";
+}
+
+.glyphicon-print:before {
+  content: "\e045";
+}
+
+.glyphicon-font:before {
+  content: "\e047";
+}
+
+.glyphicon-bold:before {
+  content: "\e048";
+}
+
+.glyphicon-italic:before {
+  content: "\e049";
+}
+
+.glyphicon-text-height:before {
+  content: "\e050";
+}
+
+.glyphicon-text-width:before {
+  content: "\e051";
+}
+
+.glyphicon-align-left:before {
+  content: "\e052";
+}
+
+.glyphicon-align-center:before {
+  content: "\e053";
+}
+
+.glyphicon-align-right:before {
+  content: "\e054";
+}
+
+.glyphicon-align-justify:before {
+  content: "\e055";
+}
+
+.glyphicon-list:before {
+  content: "\e056";
+}
+
+.glyphicon-indent-left:before {
+  content: "\e057";
+}
+
+.glyphicon-indent-right:before {
+  content: "\e058";
+}
+
+.glyphicon-facetime-video:before {
+  content: "\e059";
+}
+
+.glyphicon-picture:before {
+  content: "\e060";
+}
+
+.glyphicon-map-marker:before {
+  content: "\e062";
+}
+
+.glyphicon-adjust:before {
+  content: "\e063";
+}
+
+.glyphicon-tint:before {
+  content: "\e064";
+}
+
+.glyphicon-edit:before {
+  content: "\e065";
+}
+
+.glyphicon-share:before {
+  content: "\e066";
+}
+
+.glyphicon-check:before {
+  content: "\e067";
+}
+
+.glyphicon-move:before {
+  content: "\e068";
+}
+
+.glyphicon-step-backward:before {
+  content: "\e069";
+}
+
+.glyphicon-fast-backward:before {
+  content: "\e070";
+}
+
+.glyphicon-backward:before {
+  content: "\e071";
+}
+
+.glyphicon-play:before {
+  content: "\e072";
+}
+
+.glyphicon-pause:before {
+  content: "\e073";
+}
+
+.glyphicon-stop:before {
+  content: "\e074";
+}
+
+.glyphicon-forward:before {
+  content: "\e075";
+}
+
+.glyphicon-fast-forward:before {
+  content: "\e076";
+}
+
+.glyphicon-step-forward:before {
+  content: "\e077";
+}
+
+.glyphicon-eject:before {
+  content: "\e078";
+}
+
+.glyphicon-chevron-left:before {
+  content: "\e079";
+}
+
+.glyphicon-chevron-right:before {
+  content: "\e080";
+}
+
+.glyphicon-plus-sign:before {
+  content: "\e081";
+}
+
+.glyphicon-minus-sign:before {
+  content: "\e082";
+}
+
+.glyphicon-remove-sign:before {
+  content: "\e083";
+}
+
+.glyphicon-ok-sign:before {
+  content: "\e084";
+}
+
+.glyphicon-question-sign:before {
+  content: "\e085";
+}
+
+.glyphicon-info-sign:before {
+  content: "\e086";
+}
+
+.glyphicon-screenshot:before {
+  content: "\e087";
+}
+
+.glyphicon-remove-circle:before {
+  content: "\e088";
+}
+
+.glyphicon-ok-circle:before {
+  content: "\e089";
+}
+
+.glyphicon-ban-circle:before {
+  content: "\e090";
+}
+
+.glyphicon-arrow-left:before {
+  content: "\e091";
+}
+
+.glyphicon-arrow-right:before {
+  content: "\e092";
+}
+
+.glyphicon-arrow-up:before {
+  content: "\e093";
+}
+
+.glyphicon-arrow-down:before {
+  content: "\e094";
+}
+
+.glyphicon-share-alt:before {
+  content: "\e095";
+}
+
+.glyphicon-resize-full:before {
+  content: "\e096";
+}
+
+.glyphicon-resize-small:before {
+  content: "\e097";
+}
+
+.glyphicon-exclamation-sign:before {
+  content: "\e101";
+}
+
+.glyphicon-gift:before {
+  content: "\e102";
+}
+
+.glyphicon-leaf:before {
+  content: "\e103";
+}
+
+.glyphicon-eye-open:before {
+  content: "\e105";
+}
+
+.glyphicon-eye-close:before {
+  content: "\e106";
+}
+
+.glyphicon-warning-sign:before {
+  content: "\e107";
+}
+
+.glyphicon-plane:before {
+  content: "\e108";
+}
+
+.glyphicon-random:before {
+  content: "\e110";
+}
+
+.glyphicon-comment:before {
+  content: "\e111";
+}
+
+.glyphicon-magnet:before {
+  content: "\e112";
+}
+
+.glyphicon-chevron-up:before {
+  content: "\e113";
+}
+
+.glyphicon-chevron-down:before {
+  content: "\e114";
+}
+
+.glyphicon-retweet:before {
+  content: "\e115";
+}
+
+.glyphicon-shopping-cart:before {
+  content: "\e116";
+}
+
+.glyphicon-folder-close:before {
+  content: "\e117";
+}
+
+.glyphicon-folder-open:before {
+  content: "\e118";
+}
+
+.glyphicon-resize-vertical:before {
+  content: "\e119";
+}
+
+.glyphicon-resize-horizontal:before {
+  content: "\e120";
+}
+
+.glyphicon-hdd:before {
+  content: "\e121";
+}
+
+.glyphicon-bullhorn:before {
+  content: "\e122";
+}
+
+.glyphicon-certificate:before {
+  content: "\e124";
+}
+
+.glyphicon-thumbs-up:before {
+  content: "\e125";
+}
+
+.glyphicon-thumbs-down:before {
+  content: "\e126";
+}
+
+.glyphicon-hand-right:before {
+  content: "\e127";
+}
+
+.glyphicon-hand-left:before {
+  content: "\e128";
+}
+
+.glyphicon-hand-up:before {
+  content: "\e129";
+}
+
+.glyphicon-hand-down:before {
+  content: "\e130";
+}
+
+.glyphicon-circle-arrow-right:before {
+  content: "\e131";
+}
+
+.glyphicon-circle-arrow-left:before {
+  content: "\e132";
+}
+
+.glyphicon-circle-arrow-up:before {
+  content: "\e133";
+}
+
+.glyphicon-circle-arrow-down:before {
+  content: "\e134";
+}
+
+.glyphicon-globe:before {
+  content: "\e135";
+}
+
+.glyphicon-tasks:before {
+  content: "\e137";
+}
+
+.glyphicon-filter:before {
+  content: "\e138";
+}
+
+.glyphicon-fullscreen:before {
+  content: "\e140";
+}
+
+.glyphicon-dashboard:before {
+  content: "\e141";
+}
+
+.glyphicon-heart-empty:before {
+  content: "\e143";
+}
+
+.glyphicon-link:before {
+  content: "\e144";
+}
+
+.glyphicon-phone:before {
+  content: "\e145";
+}
+
+.glyphicon-usd:before {
+  content: "\e148";
+}
+
+.glyphicon-gbp:before {
+  content: "\e149";
+}
+
+.glyphicon-sort:before {
+  content: "\e150";
+}
+
+.glyphicon-sort-by-alphabet:before {
+  content: "\e151";
+}
+
+.glyphicon-sort-by-alphabet-alt:before {
+  content: "\e152";
+}
+
+.glyphicon-sort-by-order:before {
+  content: "\e153";
+}
+
+.glyphicon-sort-by-order-alt:before {
+  content: "\e154";
+}
+
+.glyphicon-sort-by-attributes:before {
+  content: "\e155";
+}
+
+.glyphicon-sort-by-attributes-alt:before {
+  content: "\e156";
+}
+
+.glyphicon-unchecked:before {
+  content: "\e157";
+}
+
+.glyphicon-expand:before {
+  content: "\e158";
+}
+
+.glyphicon-collapse-down:before {
+  content: "\e159";
+}
+
+.glyphicon-collapse-up:before {
+  content: "\e160";
+}
+
+.glyphicon-log-in:before {
+  content: "\e161";
+}
+
+.glyphicon-flash:before {
+  content: "\e162";
+}
+
+.glyphicon-log-out:before {
+  content: "\e163";
+}
+
+.glyphicon-new-window:before {
+  content: "\e164";
+}
+
+.glyphicon-record:before {
+  content: "\e165";
+}
+
+.glyphicon-save:before {
+  content: "\e166";
+}
+
+.glyphicon-open:before {
+  content: "\e167";
+}
+
+.glyphicon-saved:before {
+  content: "\e168";
+}
+
+.glyphicon-import:before {
+  content: "\e169";
+}
+
+.glyphicon-export:before {
+  content: "\e170";
+}
+
+.glyphicon-send:before {
+  content: "\e171";
+}
+
+.glyphicon-floppy-disk:before {
+  content: "\e172";
+}
+
+.glyphicon-floppy-saved:before {
+  content: "\e173";
+}
+
+.glyphicon-floppy-remove:before {
+  content: "\e174";
+}
+
+.glyphicon-floppy-save:before {
+  content: "\e175";
+}
+
+.glyphicon-floppy-open:before {
+  content: "\e176";
+}
+
+.glyphicon-credit-card:before {
+  content: "\e177";
+}
+
+.glyphicon-transfer:before {
+  content: "\e178";
+}
+
+.glyphicon-cutlery:before {
+  content: "\e179";
+}
+
+.glyphicon-header:before {
+  content: "\e180";
+}
+
+.glyphicon-compressed:before {
+  content: "\e181";
+}
+
+.glyphicon-earphone:before {
+  content: "\e182";
+}
+
+.glyphicon-phone-alt:before {
+  content: "\e183";
+}
+
+.glyphicon-tower:before {
+  content: "\e184";
+}
+
+.glyphicon-stats:before {
+  content: "\e185";
+}
+
+.glyphicon-sd-video:before {
+  content: "\e186";
+}
+
+.glyphicon-hd-video:before {
+  content: "\e187";
+}
+
+.glyphicon-subtitles:before {
+  content: "\e188";
+}
+
+.glyphicon-sound-stereo:before {
+  content: "\e189";
+}
+
+.glyphicon-sound-dolby:before {
+  content: "\e190";
+}
+
+.glyphicon-sound-5-1:before {
+  content: "\e191";
+}
+
+.glyphicon-sound-6-1:before {
+  content: "\e192";
+}
+
+.glyphicon-sound-7-1:before {
+  content: "\e193";
+}
+
+.glyphicon-copyright-mark:before {
+  content: "\e194";
+}
+
+.glyphicon-registration-mark:before {
+  content: "\e195";
+}
+
+.glyphicon-cloud-download:before {
+  content: "\e197";
+}
+
+.glyphicon-cloud-upload:before {
+  content: "\e198";
+}
+
+.glyphicon-tree-conifer:before {
+  content: "\e199";
+}
+
+.glyphicon-tree-deciduous:before {
+  content: "\e200";
+}
+
+.glyphicon-briefcase:before {
+  content: "\1f4bc";
+}
+
+.glyphicon-calendar:before {
+  content: "\1f4c5";
+}
+
+.glyphicon-pushpin:before {
+  content: "\1f4cc";
+}
+
+.glyphicon-paperclip:before {
+  content: "\1f4ce";
+}
+
+.glyphicon-camera:before {
+  content: "\1f4f7";
+}
+
+.glyphicon-lock:before {
+  content: "\1f512";
+}
+
+.glyphicon-bell:before {
+  content: "\1f514";
+}
+
+.glyphicon-bookmark:before {
+  content: "\1f516";
+}
+
+.glyphicon-fire:before {
+  content: "\1f525";
+}
+
+.glyphicon-wrench:before {
+  content: "\1f527";
+}
