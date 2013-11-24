@@ -19,15 +19,13 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 /*
-** Chrome for Android で、ボタンにオレンジの枠線が表示されないようにするため、
-outline: none を指定した。しかし、ヘッダとフッタが、フレンドリストやチャットの背後に
-表示される不具合が発生したので、コメントアウトした。 **
+** ボタンにオレンジの枠線が表示されないようにするために指定。
+Chrome for Android で、しかし、ヘッダとフッタが、フレンドリストやチャットの背後に
+表示される不具合が発生した場合は、コメントアウトすること。 **
 */
-/*
 button:focus {
   outline: none;
 }
-*/
 /*
 # デフォルトスタイルの上書き、ノーマライズ
 
@@ -68,10 +66,10 @@ button {
   height: 100%;
   -webkit-transition: -webkit-transform 0.2s ease-out 0s;
 }
-.showing-list-page #pages {
+.showing-chat-page #pages {
   -webkit-transform: translateX(0%);
 }
-.showing-chat-page #pages {
+.showing-dial-page #pages {
   -webkit-transform: translateX(-100%);
 }
 .page {
@@ -80,110 +78,32 @@ button {
   overflow: hidden;
   position: absolute;
 }
-#listPage {
-  left: 0;
+#chatPage {
+  left: 0%;
   top: 0;
 }
-#chatPage {
+#dialPage {
   left: 100%;
   top: 0;
 }
 /*
 # ページ内部の指定
-
-## ヘッダ
 */
-.page-title {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 50px;
-  background-color: rgba(255, 255, 255, 0.9);
-  border-bottom: 1px #d5d8d9 solid;
-  z-index: 100;
-}
-.page-title h1 {
-  margin: 0;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  font-size: 18px;
-  height: 49px;
-  line-height: 49px;
-  text-align: center;
-}
-.page-title button {
-  position: absolute;
-  left: 0;
-  top: 0;
-  font-size: 14px;
-  line-height: 49px;
-  height: 49px;
-  z-index: 110;
-  padding-left: 10px;
-}
 /*
-## ボディ部
+## チャットページ内部の指定
 */
 .container {
   position: absolute;
   left: 0;
   top: 0;
   margin: 0;
-  padding: 50px 0 0 0;
+  padding: 0;
   width: 100%;
   height: 100%;
   overflow: hidden;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
 }
-/*
-## リストページ内部の指定
-*/
-#userList {
-  margin: 0;
-  padding: 0;
-}
-#userList li {
-  display: block;
-  list-style-type: none;
-  padding: 15px;
-  min-height: 48px;
-  border-bottom: 1px #d5d8d9 solid;
-}
-.username {
-  font-size: 18px;
-  height: 18px;
-  line-height: 18px;
-  margin: 0 0 8px 0;
-  float: left;
-  font-weight: bold;
-}
-.latest-date {
-  font-size: 14px;
-  color: #707f86;
-  height: 18px;
-  line-height: 18px;
-  margin: 0 0 0 8px;
-  float: right;
-  font-weight: normal;
-}
-.latest-message {
-  clear: both;
-  font-size: 14px;
-  color: #707f86;
-  width: 100%;
-  height: 15px;
-  line-height: 15px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-/*
-## チャットページ内部の指定
-*/
 #chatContainer {
   padding-bottom: 50px;
 }
@@ -195,21 +115,17 @@ button {
   height: 1px;
   background-image: -webkit-linear-gradient(left, rgba(112, 127, 134, 0), #707f86 40%, #707f86 60%, rgba(112, 127, 134, 0));
 }
-#backButton {
-  color: #004386;
-}
-.connected #backButton {
-  display: none;
-  /* 通話中は非表示にする。*/
-
-}
-.datetime {
+#chatContainer .datetime {
   font-size: 12px;
   text-align: center;
   color: #707f86;
   margin: 20px 0 5px;
-  height: 14px;
   line-height: 14px;
+}
+#chatContainer .datetime time,
+#chatContainer .datetime address {
+  height: 14px;
+  display: block;
 }
 /*
 ### 吹き出し
@@ -220,7 +136,7 @@ button {
 .message {
   font-size: 14px;
   padding: 5px 10px;
-  width: 240px;
+  width: 60%;
   border-radius: 20px;
   line-height: 21px;
   -webkit-transition: all 0.2s ease-out 0s;
@@ -313,7 +229,9 @@ Chrome for Android でチャットのスクロールができなくなる不具�
   background-color: rgba(255, 255, 255, 0.9);
   text-align: center;
   border-top: 1px #d5d8d9 solid;
-  z-index: 100;
+  opacity: 0;
+  z-index: -100;
+  -webkit-transition: all 0.2s linear 0s;
 }
 .button-wrapper button {
   width: 160px;
@@ -322,11 +240,16 @@ Chrome for Android でチャットのスクロールができなくなる不具�
   line-height: 36px;
   border-radius: 10px;
 }
-#connectButton {
+.online .button-wrapper {
+  opacity: 1;
+  display: block;
+  z-index: 100;
+}
+#dialButton {
   color: #ffffff;
   background-color: #18933b;
 }
-.connected #connectButton {
+.connected #dialButton {
   display: none;
 }
 #disconnectButton {
@@ -336,6 +259,108 @@ Chrome for Android でチャットのスクロールができなくなる不具�
 }
 .connected #disconnectButton {
   display: inline;
+}
+/*
+## ダイアルページの指定
+*/
+#anotherIdWrapper {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 50px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-bottom: 1px #d5d8d9 solid;
+  z-index: 100;
+}
+#anotherIdWrapper #anotherId {
+  display: block;
+  width: 100%;
+  height: 100%;
+  font-size: 24px;
+  text-align: center;
+}
+#anotherIdWrapper #backButton {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 50px;
+  line-height: 50px;
+  color: #004386;
+  font-size: 14px;
+  padding-left: 10px;
+}
+#anotherIdWrapper #backSpaceButton {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  font-size: 18px;
+}
+#dialPad {
+  position: absolute;
+  left: 0;
+  top: -11px;
+  width: 100%;
+  height: 100%;
+}
+#dialPad #dialPadInner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100%;
+  height: 100%;
+}
+#dialPad table {
+  position: absolute;
+  left: -105px;
+  top: -140px;
+  margin: 0;
+  padding: 0;
+  border-spacing: 0;
+  border-collapse: collapse;
+  width: 210px;
+  height: 280px;
+}
+#dialPad table tr td {
+  width: 70px;
+  height: 70px;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+}
+#dialPad .number-button {
+  border: 1px solid #707f86;
+  width: 60px;
+  height: 60px;
+  border-radius: 50px;
+  font-size: 24px;
+  color: #707f86;
+  -webkit-transition: all 0.5s linear 0s;
+}
+#dialPad .number-button:active {
+  background: #18933b;
+  border-color: #18933b;
+  -webkit-transition: none;
+}
+#yourIdWrapper {
+  position: absolute;
+  left: 0;
+  bottom: 50px;
+  width: 100%;
+  height: 22px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 22px;
+}
+#yourIdWrapper #yourId {
+  color: #c7161e;
+}
+#callButton {
+  color: #ffffff;
+  background-color: #18933b;
 }
 /*
 # モーダルダイアログを実現するための指定
@@ -411,16 +436,6 @@ Chrome for Android でチャットのスクロールができなくなる不具�
   font-size: 18px;
   line-height: 36px;
   border-radius: 10px;
-}
-#cancelButton {
-  float: left;
-  margin-left: 15px;
-  color: #004386;
-}
-#okButton {
-  float: right;
-  margin-right: 15px;
-  color: #004386;
 }
 #rejectButton {
   float: left;
