@@ -25,7 +25,7 @@ var ui = {
 
     /**
      * モーダルダイアログを表示、非表示にするメソッドです。
-     * @param modalName モーダルの種類を 'incoming' と指定します。
+     * @param [modalName] モーダルの種類を 'incoming' と指定します。
      * 引数なしで呼び出すとモーダルを非表示にします。
      */
     showModal: function(modalName) {
@@ -56,15 +56,16 @@ var ui = {
      * チャットページの一番下までスクロールするメソッドです。
      */
     scrollToBottom: function() {
-        var totalHeight = $('#chatContainer').get(0).scrollHeight;
-        var visibleHeight = $('#chatContainer').get(0).clientHeight;
-        $('#chatContainer').scrollTop(totalHeight - visibleHeight);
+        var $chatContainer = $('#chatContainer');
+        var totalHeight = $chatContainer.get(0).scrollHeight;
+        var visibleHeight = $chatContainer.get(0).clientHeight;
+        $chatContainer.scrollTop(totalHeight - visibleHeight);
     },
 
     /**
      * 接続状態を変更するメソッドです。
      * @param state 状態を 'online' か 'offline' で指定します。
-     * @param yourId WebSocketサーバに接続した時の自分のIDを指定します。state が 'online' の時は必須。
+     * @param [yourId] WebSocketサーバに接続した時の自分のIDを指定します。state が 'online' の時は必須。
      */
     changeServiceState: function(state, yourId) {
         switch (state) {
@@ -101,7 +102,7 @@ var ui = {
             .replace(/[^0-9]/g, '')
             .slice(0, 12)
             .replace(/([0-9]{4})/g, '$1 ')
-            .trimRight();
+            .trim();
         return id;
     }
 };
@@ -127,26 +128,31 @@ var ui = {
 
     $('button')
         .hammer({drag: false, hold: false, prevent_default: false, swipe: false, touch: false, transform: false})
-        .on('tap', function(event) {
-            var id = $(this).attr('id');
-            console.log('ボタン ' + id + ' がクリックされた');
-            switch (id) {
+        .on('tap', function() {
+            var thisId = $(this).attr('id');
+            var $anotherId = $('#anotherId');
+            switch (thisId) {
                 case 'dialButton':
                     ui.showPage('dial');
+                    break;
+                case 'disconnectButton':
+                    ui.changePhoneState('disconnected');
                     break;
                 case 'backButton':
                     ui.showPage('chat');
                     ui.scrollToBottom();
                     break;
                 case 'backSpaceButton':
-                    var $anotherId = $('#anotherId');
                     var id = $anotherId.val();
                     id = ui._formatId(id.slice(0, -1));
                     $anotherId.val(id);
                     break;
                 case 'callButton':
+                    var id = $anotherId.val().replace(/\s/g, '');
+                    console.log(id); // replace with calling procedure.
                     ui.showPage('chat');
                     ui.scrollToBottom();
+                    ui.changePhoneState('connected');
                     break;
                 case 'rejectButton':
                     ui.showModal();
@@ -155,12 +161,11 @@ var ui = {
                     ui.showModal();
                     ui.showPage('chat');
                     ui.scrollToBottom();
+                    ui.changePhoneState('connected');
                     break;
                 default:
                     if ($(this).hasClass('number-button')) {
                         var number = $(this).text();
-                        console.log(number);
-                        var $anotherId = $('#anotherId');
                         $anotherId.val(ui._formatId($anotherId.val() + number));
                     }
                     break;
@@ -175,7 +180,6 @@ var ui = {
     // body { overflow: hidden } を設定しているにもかかわらず、Chromeでスクロールできてしまう不具合に対処
     $(window)
         .on('scroll', function() {
-            console.log('scroll to origin.')
             $(this).scrollTop(0).scrollLeft(0);
     });
 })();

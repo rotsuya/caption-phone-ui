@@ -39,6 +39,7 @@ html {
   width: 100%;
   height: 100%;
   font-family: 'Helvetica Neue', Helvetica, Arial, san-serif;
+  overflow: hidden;
 }
 body {
   margin: 0;
@@ -124,8 +125,10 @@ button {
 }
 #chatContainer .datetime time,
 #chatContainer .datetime address {
+  display: inline;
   height: 14px;
-  display: block;
+  font-style: normal;
+  padding: 0 5px;
 }
 /*
 ### 吹き出し
@@ -145,15 +148,25 @@ button {
   margin: 5px 15px 15px auto;
   color: #ffffff;
   background-color: #8d8ab5;
+  /*
+  ** 吹き出しのデザインをやめる場合は、以下を有効にする。
+  */
+
+  /*
   border-bottom-right-radius: 0;
-  /* 吹き出しの代わりに右下の角をとがらせる */
+  */
 
 }
 .your.message {
   margin: 5px auto 15px 15px;
   background-color: #d5d8d9;
+  /*
+  ** 吹き出しのデザインをやめる場合は、以下を有効にする。
+  */
+
+  /*
   border-bottom-left-radius: 0;
-  /* 吹き出しの代わりに左下の角をとがらせる */
+  */
 
 }
 .my.message.current {
@@ -165,11 +178,10 @@ button {
   background-color: #eaebec;
 }
 /*
-**Chrome for Mac/Android で吹き出しの残像が残る不具合と
-Chrome for Android でチャットのスクロールができなくなる不具合を回避するため
-:after と :before を使った吹き出しをやめた。**
+** 吹き出しの残像が残る不具合や、チャットのスクロールができなくなる不具合が発生した時は、
+:after と :before を使った吹き出しをコメントアウトすること。
+ここから**
 */
-/*
 .message:after {
   content: '';
   position: absolute;
@@ -177,7 +189,7 @@ Chrome for Android でチャットのスクロールができなくなる不具�
   width: 40px;
   border-radius: 20px;
   z-index: -1;
-  background-color: @white;
+  background-color: #ffffff;
   bottom: -12px;
 }
 .message:before {
@@ -193,24 +205,28 @@ Chrome for Android でチャットのスクロールができなくなる不具�
   right: -3px;
 }
 .my.message:before {
-  background-color: @mediumpurple;
+  background-color: #8d8ab5;
   right: 10px;
 }
 .my.message.current:before {
-  background-color: @transparent-mediumpurple;
+  background-color: #c6c4da;
   right: 10px;
 }
 .your.message:after {
   left: -3px;
 }
 .your.message:before {
-  background-color: @silver;
+  background-color: #d5d8d9;
   left: 10px;
 }
 .your.message.current:before {
-  background-color: @transparent-silver;
+  background-color: #eaebec;
   left: 10px;
 }
+/*
+** 吹き出しの残像が残る不具合や、チャットのスクロールができなくなる不具合が発生した時は、
+:after と :before を使った吹き出しをコメントアウトすること。
+ここまで**
 */
 .edited {
   font-style: italic;
@@ -244,6 +260,9 @@ Chrome for Android でチャットのスクロールができなくなる不具�
   opacity: 1;
   display: block;
   z-index: 100;
+}
+.connected .button-wrapper {
+  background-color: rgba(199, 22, 30, 0.5);
 }
 #dialButton {
   color: #ffffff;
@@ -341,8 +360,8 @@ Chrome for Android でチャットのスクロールができなくなる不具�
   -webkit-transition: all 0.5s linear 0s;
 }
 #dialPad .number-button:active {
-  background: #18933b;
-  border-color: #18933b;
+  background: #8d8ab5;
+  border-color: #8d8ab5;
   -webkit-transition: none;
 }
 #yourIdWrapper {
@@ -376,9 +395,9 @@ Chrome for Android でチャットのスクロールができなくなる不具�
   -webkit-transition: all 0.2s ease-out 0s;
   -webkit-transform: perspective(1000px) translateZ(1001px);
   /*
-  transform: translateZ() だけでモーダルを非表示にすると、<body> に overflow: hidden を
+  ** transform: translateZ() だけでモーダルを非表示にすると、<body> に overflow: hidden を
   適用しているのにも関わらずスクロールできてしまうという、WebKitのバグが存在することがわかった。
-  バグに対処するため、モーダルが非表示のときは display: none を設定する。
+  バグに対処するため、モーダルが非表示のときは display: none を設定する。**
   */
 
   display: none;

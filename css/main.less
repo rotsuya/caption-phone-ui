@@ -16,8 +16,13 @@
 @silver: rgb(213,216,217);
 @transparent-white: rgba(255,255,255,0.9);
 @transparent-black: rgba(0,0,0,0.2);
-@transparent-mediumpurple: rgb(198,196,218);
-@transparent-silver: rgb(234,235,236,0.5);
+@transparent-blue: rgba(0,67,134,0.5);
+@transparent-yellow: rgba(253,208,0,0.5);
+@transparent-red: rgba(199,22,30,0.5);
+@transparent-orange: rgba(239,130,0,0.5);
+@transparent-green: rgba(24,147,59,0.5);
+@light-mediumpurple: rgb(198,196,218);
+@light-silver: rgb(234,235,236);
 
 /*
 # タッチデバイス向けの指定
@@ -55,6 +60,7 @@ html {
   width: 100%;
   height: 100%;
   font-family: 'Helvetica Neue', Helvetica, Arial, san-serif;
+  overflow: hidden;
 }
 body {
   margin: 0;
@@ -83,22 +89,27 @@ button {
   height: 100%;
   -webkit-transition: -webkit-transform 0.2s ease-out 0s;
 }
+
 .showing-chat-page #pages {
   -webkit-transform: translateX(0%);
 }
+
 .showing-dial-page #pages {
   -webkit-transform: translateX(-100%);
 }
+
 .page {
   width: 100%;
   height: 100%;
   overflow: hidden;
   position: absolute;
 }
+
 #chatPage {
   left: 0%;
   top: 0;
 }
+
 #dialPage {
   left: 100%;
   top: 0;
@@ -123,6 +134,7 @@ button {
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
 }
+
 #chatContainer {
   padding-bottom: 50px;
   hr {
@@ -141,8 +153,10 @@ button {
     margin: 20px 0 5px;
     line-height: 14px;
     time, address {
+      display: inline;
       height: 14px;
-      display: block;
+      font-style: normal;
+      padding: 0 5px;
     }
   }
 }
@@ -153,6 +167,7 @@ button {
 .message-wrapper {
   position: relative;
 }
+
 .message {
   font-size: 14px;
   padding: 5px 10px;
@@ -161,31 +176,45 @@ button {
   line-height: 21px;
   -webkit-transition: all 0.2s ease-out 0s;
 }
+
 .my.message {
   margin: 5px 15px 15px auto;
   color: @white;
   background-color: @mediumpurple;
-  border-bottom-right-radius: 0;  /* 吹き出しの代わりに右下の角をとがらせる */
+  /*
+  ** 吹き出しのデザインをやめる場合は、以下を有効にする。
+  */
+  /*
+  border-bottom-right-radius: 0;
+  */
 }
+
 .your.message {
   margin: 5px auto 15px 15px;
   background-color: @silver;
-  border-bottom-left-radius: 0;   /* 吹き出しの代わりに左下の角をとがらせる */
+  /*
+  ** 吹き出しのデザインをやめる場合は、以下を有効にする。
+  */
+  /*
+  border-bottom-left-radius: 0;
+  */
 }
+
 .my.message.current {
   color: @white;
-  background-color: @transparent-mediumpurple;
+  background-color: @light-mediumpurple;
 }
+
 .your.message.current {
   color: @gray;
-  background-color: @transparent-silver;
+  background-color: @light-silver;
 }
+
 /*
-**Chrome for Mac/Android で吹き出しの残像が残る不具合と
-Chrome for Android でチャットのスクロールができなくなる不具合を回避するため
-:after と :before を使った吹き出しをやめた。**
+** 吹き出しの残像が残る不具合や、チャットのスクロールができなくなる不具合が発生した時は、
+:after と :before を使った吹き出しをコメントアウトすること。
+ここから**
 */
-/*
 .message:after {
   content: '';
   position: absolute;
@@ -196,6 +225,7 @@ Chrome for Android でチャットのスクロールができなくなる不具�
   background-color: @white;
   bottom: -12px;
 }
+
 .message:before {
   content: '';
   position: absolute;
@@ -205,29 +235,41 @@ Chrome for Android でチャットのスクロールができなくなる不具�
   z-index: -1;
   bottom: -10px;
 }
+
 .my.message:after {
   right: -3px;
 }
+
 .my.message:before {
   background-color: @mediumpurple;
   right: 10px;
 }
+
 .my.message.current:before {
-  background-color: @transparent-mediumpurple;
+  background-color: @light-mediumpurple;
   right: 10px;
 }
+
 .your.message:after {
   left: -3px;
 }
+
 .your.message:before {
   background-color: @silver;
   left: 10px;
 }
+
 .your.message.current:before {
-  background-color: @transparent-silver;
+  background-color: @light-silver;
   left: 10px;
+
 }
+/*
+** 吹き出しの残像が残る不具合や、チャットのスクロールができなくなる不具合が発生した時は、
+:after と :before を使った吹き出しをコメントアウトすること。
+ここまで**
 */
+
 .edited {
   font-style: italic;
   text-decoration: underline;
@@ -257,23 +299,32 @@ Chrome for Android でチャットのスクロールができなくなる不具�
     border-radius: 10px;
   }
 }
+
 .online .button-wrapper {
   opacity: 1;
   display: block;
   z-index: 100;
 }
+
+.connected .button-wrapper {
+  background-color: @transparent-red;
+}
+
 #dialButton {
   color: @white;
   background-color: @green;
 }
+
 .connected #dialButton {
   display: none;
 }
+
 #disconnectButton {
   color: @white;
   background-color: @red;
   display: none;
 }
+
 .connected #disconnectButton {
   display: inline;
 }
@@ -317,6 +368,7 @@ Chrome for Android でチャットのスクロールができなくなる不具�
     font-size: 18px;
   }
 }
+
 #dialPad {
   position: absolute;
   left: 0;
@@ -360,11 +412,12 @@ Chrome for Android でチャットのスクロールができなくなる不具�
     -webkit-transition: all 0.5s linear 0s;
   }
   .number-button:active {
-    background: @green;
-    border-color: @green;
+    background: @mediumpurple;
+    border-color: @mediumpurple;
     -webkit-transition: none;
   }
 }
+
 #yourIdWrapper {
   position: absolute;
   left: 0;
@@ -378,6 +431,7 @@ Chrome for Android でチャットのスクロールができなくなる不具�
     color: @red;
   }
 }
+
 #callButton {
   color: @white;
   background-color: @green;
@@ -397,23 +451,26 @@ Chrome for Android でチャットのスクロールができなくなる不具�
   -webkit-transition: all 0.2s ease-out 0s;
   -webkit-transform: perspective(1000px) translateZ(1001px);
   /*
-  transform: translateZ() だけでモーダルを非表示にすると、<body> に overflow: hidden を
+  ** transform: translateZ() だけでモーダルを非表示にすると、<body> に overflow: hidden を
   適用しているのにも関わらずスクロールできてしまうという、WebKitのバグが存在することがわかった。
-  バグに対処するため、モーダルが非表示のときは display: none を設定する。
+  バグに対処するため、モーダルが非表示のときは display: none を設定する。**
   */
   display: none;
   opacity: 0;
   z-index: 200;
 }
+
 .showing-login-modal #loginModal, .showing-incoming-modal #incomingModal {
   -webkit-transform: perspective(1000px) translateZ(0px);
   opacity: 1;
 }
+
 .dialog-wrapper {
   position: absolute;
   left: 50%;
   top: 50%;
 }
+
 .dialog {
   position: absolute;
   left: -140px;
@@ -456,12 +513,14 @@ Chrome for Android でチャットのスクロールができなくなる不具�
     border-radius: 10px;
   }
 }
+
 #rejectButton {
   float: left;
   margin-left: 15px;
   color: @white;
   background-color: @red;
 }
+
 #acceptButton {
   float: right;
   margin-right: 15px;
