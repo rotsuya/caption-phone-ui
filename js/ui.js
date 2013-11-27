@@ -147,6 +147,9 @@ var ui = {
                     id = ui._formatId(id.slice(0, -1));
                     $anotherId.val(id);
                     break;
+                case 'clearButton':
+                    $anotherId.val('');
+                    break;
                 case 'callButton':
                     var id = $anotherId.val().replace(/\s/g, '');
                     console.log(id); // replace with calling procedure.

@@ -298,6 +298,8 @@ button {
   height: 100%;
   font-size: 24px;
   text-align: center;
+  border: 0;
+  padding: 0;
 }
 #anotherIdWrapper #backButton {
   position: absolute;
@@ -308,15 +310,6 @@ button {
   color: #004386;
   font-size: 14px;
   padding-left: 10px;
-}
-#anotherIdWrapper #backSpaceButton {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 50px;
-  height: 50px;
-  line-height: 50px;
-  font-size: 18px;
 }
 #dialPad {
   position: absolute;

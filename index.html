@@ -55,7 +55,6 @@
         <section id="anotherIdWrapper">
             <button id="backButton"><span class="glyphicon glyphicon-chevron-left"></span>Back</button>
             <input type="text" id="anotherId" placeholder="Callee ID" maxlength="14"/>
-            <button id="backSpaceButton"><span class="glyphicon glyphicon-circle-arrow-left"></span></button>
         </section>
         <section id="dialPad">
             <div id="dialPadInner">
@@ -96,13 +95,13 @@
                     </tr>
                     <tr>
                         <td>
-                            &nbsp;
+                            <button class="number-button" id="clearButton"><span class="glyphicon glyphicon-remove"></span></button>
                         </td>
                         <td>
                             <button class="number-button">0</button>
                         </td>
                         <td>
-                            &nbsp;
+                            <button class="number-button" id="backSpaceButton"><span class="glyphicon glyphicon-arrow-left"></span></button>
                         </td>
                     </tr>
                     </tbody>
@@ -127,6 +126,67 @@
         </section>
     </div>
 </section>
+<div class="github-fork-ribbon-wrapper right">
+    <div class="github-fork-ribbon">
+        <a href="https://github.com/nttcom/peerjs/tree/master/examples/caption-phone">Fork me on GitHub</a>
+    </div>
+</div>
+<style>
+    /* Left will inherit from right (so we don't need to duplicate code */
+    .github-fork-ribbon {
+        position: absolute;
+        padding: 2px 0;
+        background-color: #a00;
+        background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.00)), to(rgba(0, 0, 0, 0.15)));
+        background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.00), rgba(0, 0, 0, 0.15));
+        background-image: linear-gradient(top, rgba(0, 0, 0, 0.00), rgba(0, 0, 0, 0.15));
+        -webkit-box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.5);
+        box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+        pointer-events: auto;
+    }
+
+    .github-fork-ribbon a,
+    .github-fork-ribbon a:hover {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        color: white;
+        text-decoration: none;
+        text-shadow: 0 -1px rgba(0,0,0,0.5);
+        text-align: center;
+        width: 200px;
+        line-height: 20px;
+        display: inline-block;
+        padding: 2px 0;
+        border-width: 1px 0;
+        border-style: dashed;
+        border-color: rgba(255,255,255,0.7);
+    }
+
+    .github-fork-ribbon-wrapper {
+        width: 150px;
+        height: 150px;
+        position: absolute;
+        overflow: hidden;
+        top: 0;
+        z-index: 9999;
+        pointer-events: none;
+    }
+
+    .github-fork-ribbon-wrapper.right {
+        right: 0;
+    }
+
+    .github-fork-ribbon-wrapper.right .github-fork-ribbon {
+        top: 42px;
+        right: -43px;
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        -o-transform: rotate(45deg);
+        transform: rotate(45deg);
+    }
+</style>
 <script src="js/jquery-2.0.3.js"></script>
 <script src="js/jquery.hammer.js"></script>
 <script src="js/ui.js"></script>
