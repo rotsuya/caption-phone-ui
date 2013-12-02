@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html class="showing-list-page">
+<html class="showing-dial-page">
 <head>
     <meta charset="utf-8" />
     <title>電話テキスト化サービス</title>
     <meta name="viewport" content="initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" />
     <link rel="stylesheet" href="css/main.css" />
     <meta name="description" content="caption phoneとは、WebRTCによる音声チャットをweb speech APIにより音声を自動字幕化したコミュニケーションサービスです">
 </head>
@@ -46,14 +47,16 @@
                 </article>
             </div>
         </section>
-        <footer class="button-wrapper">
-            <button id="dialButton"><span class="glyphicon glyphicon-earphone"></span>&nbsp;Dial</button>
+        <section class="button-wrapper">
             <button id="disconnectButton"><span class="glyphicon glyphicon-remove-circle"></span>&nbsp;Disconnect</button>
+        </section>
+        <footer class="tab-bar">
+            <button class="back-button" disabled="disabled"><span class="glyphicon glyphicon-list-alt"></span><br/><span class="icon-label">History</span></button>
+            <button class="dial-button"><span class="glyphicon glyphicon-th"></span><br/><span class="icon-label">Dial</span></button>
         </footer>
     </section>
     <section id="dialPage" class="page">
         <section id="anotherIdWrapper">
-            <button id="backButton"><span class="glyphicon glyphicon-chevron-left"></span>Back</button>
             <input type="text" id="anotherId" placeholder="Callee ID" maxlength="14"/>
         </section>
         <section id="dialPad">
@@ -109,10 +112,14 @@
             </div>
         </section>
         <section id="yourIdWrapper">
-            Your ID is <span id="yourId"></span>.
+            Your ID is <input type="text" id="yourId" readonly="readonly" />.
         </section>
-        <footer class="button-wrapper">
+        <section class="button-wrapper">
             <button id="callButton"><span class="glyphicon glyphicon-earphone"></span>&nbsp;Call</button>
+        </section>
+        <footer class="tab-bar">
+            <button class="back-button"><span class="glyphicon glyphicon-list-alt"></span><br/><span class="button-label">History</span></button>
+            <button class="dial-button" disabled="disabled"><span class="glyphicon glyphicon-th"></span><br/><span class="button-label">Dial</span></button>
         </footer>
     </section>
 </div>
@@ -187,8 +194,8 @@
         transform: rotate(45deg);
     }
 </style>
-<script src="js/jquery-2.0.3.js"></script>
-<script src="js/jquery.hammer.js"></script>
+<script src="//code.jquery.com/jquery-2.0.3.min.js"></script>
+<script src="//rawgithub.com/EightMedia/hammer.js/v1.0.5/dist/jquery.hammer.min.js"></script>
 <script src="js/ui.js"></script>
 </body>
 </html>

@@ -71,7 +71,7 @@ var ui = {
         switch (state) {
             case 'online':
                 $('html').removeClass('offline').addClass('online');
-                $('#yourId').text(ui._formatId(yourId));
+                $('#yourId').val(ui._formatId(yourId));
                 break;
             case 'offline':
                 $('html').removeClass('online').addClass('offline');
@@ -132,15 +132,8 @@ var ui = {
             var thisId = $(this).attr('id');
             var $anotherId = $('#anotherId');
             switch (thisId) {
-                case 'dialButton':
-                    ui.showPage('dial');
-                    break;
                 case 'disconnectButton':
                     ui.changePhoneState('disconnected');
-                    break;
-                case 'backButton':
-                    ui.showPage('chat');
-                    ui.scrollToBottom();
                     break;
                 case 'backSpaceButton':
                     var id = $anotherId.val();
@@ -167,9 +160,19 @@ var ui = {
                     ui.changePhoneState('connected');
                     break;
                 default:
+                    if ($(this).hasClass('dial-button')) {
+                        ui.showPage('dial');
+                        return;
+                    }
+                    if ($(this).hasClass('back-button')) {
+                        ui.showPage('chat');
+                        ui.scrollToBottom();
+                        return;
+                    }
                     if ($(this).hasClass('number-button')) {
                         var number = $(this).text();
                         $anotherId.val(ui._formatId($anotherId.val() + number));
+                        return;
                     }
                     break;
             }
@@ -178,6 +181,10 @@ var ui = {
     $('#anotherId').on('change', function() {
         var $anotherId = $('#anotherId');
         $anotherId.val(ui._formatId($anotherId.val()));
+    });
+
+    $('#yourId').on('click', function() {
+        this.select();
     });
 
     // body { overflow: hidden } を設定しているにもかかわらず、Chromeでスクロールできてしまう不具合に対処
