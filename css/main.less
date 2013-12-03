@@ -492,7 +492,7 @@ button {
   z-index: 200;
 }
 
-.showing-login-modal #loginModal, .showing-incoming-modal #incomingModal {
+.showing-incoming-modal #incomingModal, .showing-error-modal #errorModal {
   -webkit-transform: perspective(1000px) translateZ(0px);
   opacity: 1;
 }
@@ -512,31 +512,28 @@ button {
   height: 187px;
   border-radius: 10px;
   h1 {
-    margin: 15px 0;
+    position: absolute;
+    left: 0;
+    top: 15px;
+    margin: 0;
+    width: 100%;
+    font-size: 18px;
+    line-height: 21px;
+    text-align: center;
+  }
+  p {
+    position: absolute;
+    left: 0;
+    top: 51px;
+    margin: 0;
     width: 100%;
     font-size: 14px;
     line-height: 21px;
     text-align: center;
   }
-  p {
-    margin: 15px 0;
-    font-size: 14px;
-    line-height: 21px;
-    text-align: center;
-  }
-  input[type=text] {
-    display: block;
-    font-size: 14px;
-    padding: 6px 12px;
-    margin: 15px;
-    width: 250px;
-    height: 34px;
-    line-height: 20px;
-    border: 1px solid @silver;
-    background-color: white;
-    border-radius: 4px;
-  }
   button {
+    position: absolute;
+    bottom: 15px;
     display: block;
     width: 117px;
     height: 36px;
@@ -544,18 +541,22 @@ button {
     line-height: 36px;
     border-radius: 10px;
   }
-}
+  #rejectButton {
+    left: 15px;
+    color: @white;
+    background-color: @red;
+  }
 
-#rejectButton {
-  float: left;
-  margin-left: 15px;
-  color: @white;
-  background-color: @red;
-}
+  #acceptButton {
+    right: 15px;
+    color: @white;
+    background-color: @green;
+  }
 
-#acceptButton {
-  float: right;
-  margin-right: 15px;
-  color: @white;
-  background-color: @green;
+  #closeButton {
+    left: 81px;
+    color: @white;
+    background-color: @green;
+  }
+
 }

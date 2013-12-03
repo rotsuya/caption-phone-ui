@@ -27,8 +27,10 @@ var ui = {
      * モーダルダイアログを表示、非表示にするメソッドです。
      * @param [modalName] モーダルの種類を 'incoming' と指定します。
      * 引数なしで呼び出すとモーダルを非表示にします。
+     * @param [title] モーダルのタイトルを指定します。省略可です。
+     * @param [message] モーダルに表示するメッセージを指定します。省略可です。
      */
-    showModal: function(modalName) {
+    showModal: function(modalName, title, message) {
         switch (modalName) {
             case 'incoming':
                 $('#incomingModal').show();
@@ -38,8 +40,18 @@ var ui = {
                     $('html').addClass('showing-incoming-modal');
                 }, 0);
                 break;
+            case 'error':
+                $('#errorTitle').text(title || 'エラー');
+                $('#errorMessage').text(message || 'エラーが発生しました。');
+                $('#errorModal').show();
+                // 同一スレッドで実行するとトランジションのアニメーションが描画されないので、
+                // 別スレッドで非同期に実行する。
+                setTimeout(function(){
+                    $('html').addClass('showing-error-modal');
+                }, 0);
+                break;
             default:
-                $('html').removeClass('showing-incoming-modal');
+                $('html').removeClass('showing-incoming-modal showing-error-modal');
                 // transform: translateZ() だけでモーダルを非表示にすると、<body> に overflow: hidden を
                 // 適用しているのにも関わらずスクロールできてしまうという、WebKitのバグが存在することがわかった。
                 // バグに対処するため、モーダルが非表示のときは .hide() を使って display: none を設定する。
@@ -151,6 +163,9 @@ var ui = {
                     ui.changePhoneState('connected');
                     break;
                 case 'rejectButton':
+                    ui.showModal();
+                    break;
+                case 'closeButton':
                     ui.showModal();
                     break;
                 case 'acceptButton':
